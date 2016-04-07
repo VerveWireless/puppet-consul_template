@@ -97,6 +97,16 @@ class consul_template::install {
           content => template('consul_template/consul-template.sles.erb')
         }
       }
+      'supervisord' : {
+        supervisord::program { 'consul-template':
+          command     => "$consul_template::bin_dir/consul-template -config $consul_template::config_dir/config $consul_template::extra_options",
+          priority    => '15',
+          directory => $consul_template::bin_dir,
+          user => $consul_template::user,
+          autorestart => true,
+          redirect_stderr => false
+        }
+      }
       default : {
         fail("I don't know how to create an init script for style ${consul_template::init_style}")
       }
