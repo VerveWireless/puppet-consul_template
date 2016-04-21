@@ -99,7 +99,7 @@ class consul_template::install {
       }
       'supervisord' : {
         supervisord::program { 'consul-template':
-          command     => "$consul_template::bin_dir/consul-template -config $consul_template::config_dir/config $consul_template::extra_options",
+          command     => "bash -c 'sleep 5 && $consul_template::bin_dir/consul-template -config $consul_template::config_dir/config $consul_template::extra_options'",
           priority    => '15',
           directory => $consul_template::bin_dir,
           user => $consul_template::user,
