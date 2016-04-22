@@ -99,12 +99,13 @@ class consul_template::install {
       }
       'supervisord' : {
         supervisord::program { 'consul-template':
-          command     => "bash -c 'sleep 5 && $consul_template::bin_dir/consul-template -config $consul_template::config_dir/config $consul_template::extra_options'",
+          command     => "$consul_template::bin_dir/consul-template -config $consul_template::config_dir/config $consul_template::extra_options",
           priority    => '15',
           directory => $consul_template::bin_dir,
           user => $consul_template::user,
           autorestart => true,
-          redirect_stderr => false
+          redirect_stderr => false,
+          warmup => hiera("consul_template::supervisord_warmup",0)
         }
       }
       default : {
